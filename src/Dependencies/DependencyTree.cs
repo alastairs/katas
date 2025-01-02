@@ -10,28 +10,36 @@ public class DependencyTree
     {
         _tree.Add(component.Name, new SortedSet<string>(component.Dependencies));
 
-        foreach(var (_, dependencies) in _tree)
+        foreach (var current in _tree)
         {
-            UpdateDependencies(dependencies, component);
+            var (_, nodeDependencies) = current;
+
+            UpdateChildDependencies(nodeDependencies, component);
+            UpdateParentDependencies(nodeDependencies);
         }
     }
 
-    private void UpdateDependencies(SortedSet<string> dependencies, Component component)
+    private static void UpdateChildDependencies(SortedSet<string> nodeDependencies, Component newComponent)
     {
-        // "Forward" update: if the new component is a dependency of the current component, add its dependencies
-        // E.g.: if A depends on B, and B (new) depends on E, then A must depend on E too.
-        if (dependencies.Contains(component.Name))
+        // If the new component is a dependency of the current node, add the new component's dependencies to the
+        // node. E.g.: if A exists in the tree and depends on B, and B is being added to
+        // the tree and depends on E, then A must depend on E too.
+        if (nodeDependencies.Contains(newComponent.Name))
         {
-            dependencies.UnionWith(component.Dependencies);
+            nodeDependencies.UnionWith(newComponent.Dependencies);
         }
+    }
 
-        // "Backward" update: if the current component is a dependency of the new component, add its dependencies
-        // E.g.: if B depends on C and E, and A (newly added) depends on B and C, then A must also depend on E.
-        for (var i = 0; i < dependencies.Count; i++)
+    private void UpdateParentDependencies(SortedSet<string> nodeDependencies)
+    {
+        // If the current node is a dependency of the new component, add the current node's own dependencies to
+        // the new component. E.g.: if B exists in the tree and depends on C and E, and A is being added to the
+        // tree and depends on B and C, then A must also depend on E.
+        for (var i = 0; i < nodeDependencies.Count; i++)
         {
-            if (_tree.TryGetValue(dependencies.ToArray()[i], out var furtherDependencies))
+            if (_tree.TryGetValue(nodeDependencies.ToArray()[i], out var furtherDependencies))
             {
-                dependencies.UnionWith(furtherDependencies);
+                nodeDependencies.UnionWith(furtherDependencies);
             }
         }
     }

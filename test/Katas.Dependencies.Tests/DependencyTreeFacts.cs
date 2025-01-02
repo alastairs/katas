@@ -18,6 +18,7 @@ public class DependencyTreeFacts
         sut.Add(new Component("A", ["B", "C"]));
         sut.Add(new Component("B", ["C", "E"]));
 
+        Assert.Distinct(sut.DependenciesFor("A"));
         Assert.Equal(["B", "C", "E"], sut.DependenciesFor("A"));
     }
 
@@ -29,6 +30,7 @@ public class DependencyTreeFacts
         sut.Add(new Component("B", ["C", "E"]));
         sut.Add(new Component("A", ["B", "C"]));
 
+        Assert.Distinct(sut.DependenciesFor("A"));
         Assert.Equal(["B", "C", "E"], sut.DependenciesFor("A"));
     }
 }
