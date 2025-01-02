@@ -20,4 +20,22 @@ public class StringParsingFacts
 
         Assert.Equivalent(new Component("A", ["B", "C", "D", "E", "F"]), result);
     }
+
+    [Fact]
+    public void Multiple_dependencies_are_parsed_out_of_the_string()
+    {
+        const string input = """
+                             A B C
+                             B C E
+                             C G
+                             """;
+
+        var result = Component.ParseMany(input);
+
+        Assert.Equivalent(new List<Component> {
+            new("A", ["B", "C"]),
+            new("B", ["C", "E"]),
+            new("C", ["G"]),
+        }, result);
+    }
 }
