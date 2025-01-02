@@ -41,7 +41,7 @@ public class DependencyTree
         return output.ToString().Trim();
     }
 
-    public static DependencyTree Build(string input)
+    private static DependencyTree Build(string input)
     {
         var components = Component.ParseMany(input);
         var tree = new DependencyTree();
