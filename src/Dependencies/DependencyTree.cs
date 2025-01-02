@@ -10,12 +10,28 @@ public class DependencyTree
     {
         _tree.Add(component.Name, new SortedSet<string>(component.Dependencies));
 
-        // Update existing components' dependencies
-        foreach (var (_, dependencies) in _tree)
+        foreach(var (_, dependencies) in _tree)
         {
-            if (dependencies.Contains(component.Name))
+            UpdateDependencies(dependencies, component);
+        }
+    }
+
+    private void UpdateDependencies(SortedSet<string> dependencies, Component component)
+    {
+        // "Forward" update: if the new component is a dependency of the current component, add its dependencies
+        // E.g.: if A depends on B, and B (new) depends on E, then A must depend on E too.
+        if (dependencies.Contains(component.Name))
+        {
+            dependencies.UnionWith(component.Dependencies);
+        }
+
+        // "Backward" update: if the current component is a dependency of the new component, add its dependencies
+        // E.g.: if B depends on C and E, and A (newly added) depends on B and C, then A must also depend on E.
+        for (var i = 0; i < dependencies.Count; i++)
+        {
+            if (_tree.TryGetValue(dependencies.ToArray()[i], out var furtherDependencies))
             {
-                dependencies.UnionWith(component.Dependencies);
+                dependencies.UnionWith(furtherDependencies);
             }
         }
     }

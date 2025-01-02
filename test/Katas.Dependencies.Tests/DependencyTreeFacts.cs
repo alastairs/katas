@@ -20,4 +20,15 @@ public class DependencyTreeFacts
 
         Assert.Equal(["B", "C", "E"], sut.DependenciesFor("A"));
     }
+
+    [Fact]
+    public void Dependencies_are_retrospectively_updated()
+    {
+        var sut = new DependencyTree();
+
+        sut.Add(new Component("B", ["C", "E"]));
+        sut.Add(new Component("A", ["B", "C"]));
+
+        Assert.Equal(["B", "C", "E"], sut.DependenciesFor("A"));
+    }
 }
