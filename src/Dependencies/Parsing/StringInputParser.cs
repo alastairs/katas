@@ -2,8 +2,11 @@
 
 public class StringInputParser
 {
-    public IEnumerable<string> Parse(string input)
+    public Component Parse(string input)
     {
-        return input.Split(' ');
+        var components = input.Split(' ');
+        return new Component(components[0], components[1..]);
     }
 }
+
+public record Component(string Name, IList<string> Dependencies);

@@ -10,7 +10,7 @@ public class StringInputParserFacts
 
         var result = sut.Parse(input);
 
-        Assert.Equal(["A", "B", "C"], result);
+        Assert.Equivalent(new Component("A", ["B", "C"]), result);
     }
 
     [Fact]
@@ -21,6 +21,6 @@ public class StringInputParserFacts
 
         var result = sut.Parse(input);
 
-        Assert.Equal(["A", "B", "C", "D", "E", "F"], result);
+        Assert.Equivalent(new Component("A", ["B", "C", "D", "E", "F"]), result);
     }
 }
