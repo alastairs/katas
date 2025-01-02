@@ -1,5 +1,9 @@
 # Katas
 
+Implementations of various code katas for fun and no profit. All are written in
+C# and will have a dependency on the latest LTS release of .NET SDK and runtime.
+At time of writing, this is .NET 8.0 ([download]).
+
 ## Building, testing, publishing
 
 Use the usual `dotnet` CLI tools:
@@ -41,3 +45,5 @@ F H
 "
 "A B C`nB C E`nC G`nD A F`nE F`nF H" | dotnet run -- print
 ```
+
+  [download]: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
