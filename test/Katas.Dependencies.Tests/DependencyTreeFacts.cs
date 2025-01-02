@@ -43,4 +43,18 @@ public class DependencyTreeFacts
 
         Assert.Equal("A  B C", sut.Print());
     }
+
+    [Fact]
+    public void Components_do_not_depend_on_themselves()
+    {
+        var sut = new DependencyTree();
+
+        sut.Add(new Component("A", ["B"]));
+        sut.Add(new Component("B", ["C"]));
+        sut.Add(new Component("C", ["A"]));
+
+        Assert.Equal(["B", "C"], sut.DependenciesFor("A"));
+        Assert.Equal(["A", "C"], sut.DependenciesFor("B"));
+        Assert.Equal(["A", "B"], sut.DependenciesFor("C"));
+    }
 }
