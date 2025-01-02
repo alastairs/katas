@@ -20,6 +20,12 @@ public class DependencyTree
         }
     }
 
+    public bool Contains(string componentName) =>
+        _tree.ContainsKey(componentName);
+
+    public IEnumerable<string> DependenciesFor(string componentName) =>
+        _tree[componentName];
+
     public string Print()
     {
         var output = new StringBuilder();
@@ -70,10 +76,4 @@ public class DependencyTree
             }
         }
     }
-
-    public bool Contains(string componentName) =>
-        _tree.ContainsKey(componentName);
-
-    public IEnumerable<string> DependenciesFor(string componentName) =>
-        _tree[componentName];
 }
