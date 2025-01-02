@@ -1,14 +1,12 @@
 namespace Katas.Dependencies.Tests;
 
-public class StringInputParserFacts
+public class StringParsingFacts
 {
     [Fact]
     public void Input_is_split_on_single_whitespaces()
     {
         const string input = "A B C";
-        var sut = new StringInputParser();
-
-        var result = sut.Parse(input);
+        var result = Component.Parse(input);
 
         Assert.Equivalent(new Component("A", ["B", "C"]), result);
     }
@@ -17,9 +15,8 @@ public class StringInputParserFacts
     public void Longer_input_is_split_on_single_whitespaces()
     {
         const string input = "A B C D E F";
-        var sut = new StringInputParser();
 
-        var result = sut.Parse(input);
+        var result = Component.Parse(input);
 
         Assert.Equivalent(new Component("A", ["B", "C", "D", "E", "F"]), result);
     }
