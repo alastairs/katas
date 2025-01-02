@@ -1,4 +1,5 @@
-﻿using Katas.Dependencies.Parsing;
+﻿using System.Text;
+using Katas.Dependencies.Parsing;
 
 namespace Katas.Dependencies;
 
@@ -18,6 +19,32 @@ public class DependencyTree
             UpdateParentDependencies(nodeDependencies);
         }
     }
+
+    public string Print()
+    {
+        var output = new StringBuilder();
+        foreach (var (component, dependencies) in _tree)
+        {
+            output.Append($"{component}  ");
+            output.AppendJoin(' ', dependencies);
+            output.AppendLine();
+        }
+
+        return output.ToString().Trim();
+    }
+
+    public static DependencyTree Build(string input)
+    {
+        var components = Component.ParseMany(input);
+        var tree = new DependencyTree();
+        foreach (var component in components)
+        {
+            tree.Add(component);
+        }
+        return tree;
+    }
+
+    public static string Print(string input) => Build(input).Print();
 
     private static void UpdateChildDependencies(SortedSet<string> nodeDependencies, Component newComponent)
     {
