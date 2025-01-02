@@ -2,38 +2,45 @@
 using Katas.Dependencies.DependenciesTree;
 using Spectre.Console.Cli;
 
+// ReSharper disable ClassNeverInstantiated.Global
+
 namespace Katas.Dependencies.Cli;
 
 [Description("Prints the specified dependencies tree")]
 public class PrintCommand : Command<PrintCommand.Settings>
 {
-    public sealed class Settings : CommandSettings
+    public sealed class Settings(string input, string filePath) : CommandSettings
     {
-        [CommandOption("-f|--file <FILE>")]
-        [Description("The dependency file to read from. Use [grey]-[/] to read from standard input.")]
-        public required FlagValue<string> FilePath { get; set; }
 
-        [CommandArgument(0, "<LIST>")]
-        public required string Input { get; set; }
+        [CommandArgument(0, "[INPUT]")]
+        [Description("The list of components and dependencies. The first token of each input line " +
+                     "should be the name of the token. The remaining tokens are the names of the " +
+                     "things the first item depends upon.")]
+        public required string Input { get; init; } = input;
+
+        [CommandOption("-f|--file <PATH>")]
+        [Description("The dependency file to read from.")]
+        public required string FilePath { get; init; } = filePath;
     }
 
     public override int Execute(CommandContext context, Settings settings)
     {
-        var input = settings.Input;
-
-        if (settings.FilePath.IsSet)
+        if (!string.IsNullOrWhiteSpace(settings.Input))
         {
-            var stream = settings.FilePath switch
-            {
-                { IsSet: true } and { Value: "-" } => Console.OpenStandardInput(),
-                _ => File.OpenRead(settings.FilePath.Value)
-            };
-
-            using var reader = new StreamReader(stream);
-            input = reader.ReadToEnd();
+            Console.WriteLine(DependencyTree.Print(settings.Input));
+            return 0;
         }
 
-        Console.WriteLine(DependencyTree.Print(input));
+        if (!string.IsNullOrWhiteSpace(settings.FilePath))
+        {
+            var input = File.ReadAllText(settings.FilePath);
+            Console.WriteLine(DependencyTree.Print(input));
+            return 0;
+        }
+
+
+        using var reader = new StreamReader(Console.OpenStandardInput());
+        Console.WriteLine(DependencyTree.Print(reader.ReadToEnd()));
         return 0;
     }
 }
