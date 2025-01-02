@@ -28,4 +28,25 @@ public class AcceptanceTests
             """;
         Assert.Equal(expected, actual);
     }
+
+    [Fact]
+    public void Circular_dependencies_are_handled()
+    {
+        const string input =
+            """
+            A B
+            B C
+            C A
+            """;
+
+        var actual = DependencyTree.Print(input);
+
+        const string expected =
+            """
+            A  B C
+            B  A C
+            C  A B
+            """;
+        Assert.Equal(expected, actual);
+    }
 }
