@@ -1,7 +1,6 @@
 ﻿using System.Text;
-using Katas.Dependencies.Parsing;
 
-namespace Katas.Dependencies;
+namespace Katas.Dependencies.Parsing;
 
 public class DependencyTree
 {
