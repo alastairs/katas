@@ -33,4 +33,14 @@ public class DependencyTreeFacts
         Assert.Distinct(sut.DependenciesFor("A"));
         Assert.Equal(["B", "C", "E"], sut.DependenciesFor("A"));
     }
+
+    [Fact]
+    public void Tree_can_be_printed()
+    {
+        var sut = new DependencyTree();
+
+        sut.Add(new Component("A", ["B", "C"]));
+
+        Assert.Equal("A  B C", sut.Print());
+    }
 }
