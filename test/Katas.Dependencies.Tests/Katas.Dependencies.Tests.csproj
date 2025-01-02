@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
-    <Using Include="Katas.Dependencies.Parsing" />
+    <Using Include="Katas.Dependencies.DependenciesTree" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿namespace Katas.Dependencies.Parsing;
+﻿namespace Katas.Dependencies.DependenciesTree;
 
 public record Component(string Name, IList<string> Dependencies)
 {
