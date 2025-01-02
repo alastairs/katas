@@ -12,10 +12,13 @@ public class DependencyTree
 
         foreach (var current in _tree)
         {
-            var (_, nodeDependencies) = current;
+            var (name, nodeDependencies) = current;
 
             UpdateChildDependencies(nodeDependencies, component);
             UpdateParentDependencies(nodeDependencies);
+
+            // Do not permit a component to depend on itself.
+            nodeDependencies.Remove(name);
         }
     }
 
